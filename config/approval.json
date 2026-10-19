@@ -1,0 +1,23 @@
+{
+  "$comment": "审批风险规则（前端 classify 使用）。属于安全配置快照：直接改文件后需在设置页「重新加载安全配置」确认；未确认时使用内置规则。规则是 JS 正则；非法正则会被跳过并在控制台报出，不会导致整体失效。危险类永远需要用户确认——本文件只影响「分级」，不影响「是否放行」。复合命令（管道/分号/重定向/子表达式/脚本块/写入类 cmdlet）由前端 isCompoundOrRisky 直接判 danger，本文件的 readonly 只对单条简单命令生效。",
+  "$schema": "danger 命中 → 危险（默认高亮停在拒绝）；readonly 命中 → 只读（默认高亮停在允许）；都不命中 → 普通。",
+  "danger": [
+    "remove-item[^\\n]*-recurse",
+    "remove-item[^\\n]*-force",
+    "\\brmdir\\b[^\\n]*\\/s",
+    "\\brd\\b[^\\n]*\\/s",
+    "\\bdel\\b[^\\n]*\\/[fsq]",
+    "format-volume|\\bformat\\s+[a-z]:",
+    "diskpart|\\bcipher\\s+\\/w\\b",
+    "reg\\s+(add|delete|import)",
+    "set-itemproperty[^\\n]*hklm",
+    "new-itemproperty[^\\n]*hklm",
+    "(invoke-webrequest|invoke-restmethod|\\biwr\\b|curl)[^\\n]*\\|[^\\n]*\\b(iex|invoke-expression)\\b",
+    "set-executionpolicy",
+    "takeown|\\bicacls\\b[^\\n]*\\/grant",
+    "schtasks[^\\n]*\\/create",
+    "stop-computer|restart-computer|\\bshutdown\\b",
+    "start-process[^\\n]*-verb\\s+runas"
+  ],
+  "readonly": "^\\s*(get-|select-|test-|measure-|resolve-|compare-|write-output|dir\\b|ls\\b|gci\\b|cat\\b|type\\b)"
+}

@@ -1,0 +1,89 @@
+{
+  "version": 2,
+  "updated": "2026-10-16",
+  "notes": "Mica 选择器与外流程配置 v2.2（2026-10-16 故障后修订：assistant 组原 ds-assistant-message-main-content 类名因 DeepSeek 前端发版失效，导致两轮空回复。已增加语义化备用候选，并在引擎层加入 15s/30s 选择器失效检测。adapter 化预留：未来多站点时拷贝整个对象挂到 adapters.<name>。原则：语义锚点优先，混淆类名兜底；candidates 依序尝试，命中即止。fragility=该候选对改版的脆弱度。",
+  "completion": {
+    "timeoutSec": 180,
+    "pollMs": 300,
+    "primary": "sendButtonState",
+    "fallbackStableTicks": 7,
+    "cooldownTicks": 2,
+    "notes": "完成判定主信号=发送按钮回到可发送态；2026-10-16 深夜实测（spike E7/run10）：svg path 前缀状态信号**已现场验证可用**（stop@0.7s → arrow@3.9s → 4.3s PRIMARY 判定，比文本兜底快 ~2.5s，+3s 零增长）。aria 候选仍不可用（按钮无 aria-label）。更好的语义信号（title/data-* 属性）列入阶段2探测清单。"
+  },
+  "sendStates": {
+    "generatingKeywords": ["停止", "Stop", "stop"],
+    "idleKeywords": ["发送", "Send", "send"],
+    "svgFallback": {
+      "stopPrefix": "M2 4.88C2 3.68009",
+      "arrowPrefix": "M8.3125 0.980206",
+      "notes": "2026-10-16 实测：aria 关键词未命中（按钮无 aria-label）；svg 前缀已在真实生成过程中双向观测验证（stop@0.7s / arrow@3.9s，run10），升格为**主状态信号**；字面量来自现役 ps1 实测值"
+    },
+    "notes": "状态检测优先级（修正版）：svg path 前缀（当前唯一可用）> 未来发现的语义属性。生成中=stop 前缀，可发送=arrow 前缀。"
+  },
+  "groups": {
+    "assistant": {
+      "description": "助手消息容器（取最后一条的 textContent）",
+      "severity": "critical",
+      "expected": { "min": 0 },
+      "candidates": [
+        { "selector": "[class*=\"_3098d02\"]", "kind": "class-hash-structural", "fragility": "high", "verified": true, "verifiedAt": "2026-10-17", "verifiedNote": "DOM探针确认：聊天滚动区(_8a693f3)的直接子元素，每条消息一个实例。引擎已改用滚动容器兜底提取为主，此候选作为类名直匹配加速" },
+        { "selector": "[class*=\"ds-assistant-message-main-content\"]", "kind": "class-fuzzy", "fragility": "medium", "verified": true, "verifiedAt": "2026-10-16", "verifiedNote": "2026-10-16 深夜因 DeepSeek 前端发版失效，导致空回复故障" },
+        { "selector": ".ds-assistant-message-main-content", "kind": "class", "fragility": "medium", "verified": true, "verifiedAt": "2026-10-16", "verifiedNote": "同上，与候选 1 同根类名" },
+        { "selector": "[class*=\"assistant-message\"]", "kind": "class-fuzzy-broad", "fragility": "low", "verified": false, "verifiedAt": "2026-10-16", "verifiedNote": "故障后新增的宽匹配候选，待自检验证" },
+        { "selector": "[class*=\"message-content\"]", "kind": "class-fuzzy-broad", "fragility": "low", "verified": false, "verifiedAt": "2026-10-16", "verifiedNote": "故障后新增，通用聊天应用模式" },
+        { "selector": "[data-message-author-role=\"assistant\"]", "kind": "semantic-candidate", "fragility": "low", "verified": false, "verifiedAt": "2026-10-16", "verifiedNote": "实测 0 命中（DS 页面无此属性）" },
+        { "selector": "[data-role=\"assistant\"]", "kind": "semantic-candidate", "fragility": "low", "verified": false, "verifiedAt": "2026-10-16", "verifiedNote": "故障后新增，常见 data 属性模式" }
+      ],
+      "notes": "2026-10-17 修复：DeepSeek 发版后消息容器改用哈希类 _3098d02，原 6 个候选全部误匹配或 0 命中，导致读回 64 字符半截内容（代码块丢失）。引擎 read_js_full/poll_js 已改为滚动容器(_8a693f3/ds-scroll-area)结构提取为主，类名选择器为兜底。空会话=0 命中（合法）；首个回合后=1。"
+    },
+    "user": {
+      "description": "用户消息容器（仅用于计数：判断消息已发出）",
+      "severity": "normal",
+      "expected": { "min": 0 },
+      "candidates": [
+        { "selector": "[class*=\"fbb737a4\"]", "kind": "class-hash", "fragility": "high", "verified": true, "verifiedAt": "2026-10-16" }
+      ],
+      "notes": "fbb737a4 为构建期混淆类名，本配置最高危依赖（实测回合后=1）；尚未找到语义替代，列入阶段2自检任务"
+    },
+    "input": {
+      "description": "消息输入框（注入用；写入须走原生 value setter + input 事件）",
+      "severity": "critical",
+      "expected": { "min": 1 },
+      "candidates": [
+        { "selector": "textarea", "kind": "tag", "fragility": "low", "verified": true, "verifiedAt": "2026-10-16" },
+        { "selector": "[role=\"textbox\"]", "kind": "role", "fragility": "low", "verified": false, "verifiedAt": "2026-10-16", "verifiedNote": "实测 0 命中" }
+      ]
+    },
+    "sendBtn": {
+      "description": "发送/停止按钮（右下角圆形主按钮）",
+      "severity": "critical",
+      "expected": { "min": 1 },
+      "candidates": [
+        { "selector": "div[role=\"button\"].ds-button--primary.ds-button--circle", "kind": "class", "fragility": "medium", "verified": true, "verifiedAt": "2026-10-16" },
+        { "selector": "[role=\"button\"][aria-label*=\"发送\"]", "kind": "aria", "fragility": "low", "verified": false, "verifiedAt": "2026-10-16", "verifiedNote": "实测 0 命中（按钮无 aria-label）" },
+        { "selector": "[role=\"button\"][aria-label*=\"Send\"]", "kind": "aria", "fragility": "low", "verified": false, "verifiedAt": "2026-10-16", "verifiedNote": "实测 0 命中" },
+        { "selector": "[role=\"button\"][aria-label*=\"停止\"]", "kind": "aria-stop", "fragility": "low", "verified": false, "verifiedAt": "2026-10-16", "verifiedNote": "实测 0 命中" }
+      ],
+      "notes": "定位规则：可见 + x>宽度*0.5 + y>高度*0.6（沿用现役 ps1 的启发式，实测命中）；状态判定见 sendStates（aria 路径不可用，走 svg 前缀）"
+    },
+    "fileInput": {
+      "description": "附件上传 input（DOM.setFileInputFiles 目标）",
+      "severity": "normal",
+      "expected": { "min": 1 },
+      "candidates": [
+        { "selector": "input[type=\"file\"]", "kind": "attr", "fragility": "low", "verified": true, "verifiedAt": "2026-10-16" }
+      ],
+      "notes": "登录后聊天页存在（实测 nodeId=29，setFileInputFiles 返回 {} 成功）；sign_in 页不存在（预期）"
+    }
+  },
+  "runtimeHints": {
+    "inject": {
+      "method": "native-value-setter",
+      "notes": "Object.getOwnPropertyDescriptor(HTMLTextAreaElement.prototype,'value').set + input/change 事件；2026-10-16 内嵌实测通过（E6a, len=11）"
+    },
+    "sendKeys": {
+      "enter": true,
+      "notes": "回车发送用 KeyboardEvent(keyCode:13) 三连发；2026-10-16 内嵌实测通过（E6b）"
+    }
+  }
+}

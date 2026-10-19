@@ -1,0 +1,17 @@
+# 默认：文本文件自动规范化（仅影响行尾，不影响 BOM）
+* text=auto
+
+# ===== 字节冻结区：禁止任何行尾/内容转换（保证与二进制内常量逐字节一致）=====
+/scripts/**            -text
+/baseline/exact_scripts/** -text
+/baseline/forms/**     -text
+/baseline/upstream/**  -text
+
+# 二进制（虽被 .gitignore 排除，仍显式声明防止误入库）
+*.exe  binary
+*.zip  binary
+*.e    binary
+*.der  binary
+
+# 运行日志（GBK 编码，禁止行尾转换防止损坏字节）
+*.log  -text

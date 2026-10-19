@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1180" height="600" viewBox="0 0 1180 600" role="img" aria-label="Mica system architecture">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#8b949e"/>
+    </marker>
+    <marker id="arrBlue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#79c0ff"/>
+    </marker>
+    <marker id="arrRed" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0L10 5L0 10z" fill="#f85149"/>
+    </marker>
+    <pattern id="grid2" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#21262d" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1180" height="600" rx="14" fill="#0d1117" stroke="#30363d"/>
+  <rect width="1180" height="600" rx="14" fill="url(#grid2)" opacity="0.5"/>
+  <text x="40" y="46" font-family="ui-monospace,Consolas,monospace" font-size="14" letter-spacing="4" fill="#8b949e">MICA · SYSTEM ARCHITECTURE</text>
+  <text x="1140" y="46" text-anchor="end" font-family="ui-monospace,Consolas,monospace" font-size="13" fill="#6e7681">v0.1.1</text>
+
+  <!-- ===== Shell ===== -->
+  <rect x="40" y="66" width="1100" height="156" rx="10" fill="#10161f" stroke="#3b434d"/>
+  <text x="62" y="94" font-family="ui-monospace,Consolas,monospace" font-size="13" letter-spacing="2" fill="#58a6ff">TAURI SHELL · WEBVIEW2</text>
+
+  <rect x="72" y="112" width="430" height="88" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="94" y="144" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="17" font-weight="600" fill="#e6edf3">React 19 前端</text>
+  <text x="94" y="170" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="12.5" fill="#8b949e">审批卡 · 审计页 · 技能页 · 插件页 · 设置页 · 诊断抽屉</text>
+  <text x="94" y="188" font-family="ui-monospace,Consolas,monospace" font-size="11" fill="#6e7681">14 components · 8 hooks · vitest 244</text>
+
+  <rect x="678" y="112" width="430" height="88" rx="8" fill="#161b22" stroke="#30363d"/>
+  <text x="700" y="144" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="17" font-weight="600" fill="#e6edf3">内嵌 WebView</text>
+  <text x="700" y="170" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="12.5" fill="#8b949e">已登录的网页版大模型（推理内核，无 API Key）</text>
+  <text x="700" y="188" font-family="ui-monospace,Consolas,monospace" font-size="11" fill="#6e7681">SSE · text/event-stream</text>
+
+  <!-- external links -->
+  <g stroke="#8b949e" stroke-width="1.6" fill="none">
+    <path d="M287 200 V254 H157 V326" marker-start="url(#arr)" marker-end="url(#arr)"/>
+    <path d="M893 200 V254 H575 V326" marker-start="url(#arr)" marker-end="url(#arr)"/>
+  </g>
+  <text x="196" y="246" font-family="ui-monospace,Consolas,monospace" font-size="12" fill="#8b949e">IPC</text>
+  <text x="700" y="246" font-family="ui-monospace,Consolas,monospace" font-size="12" fill="#8b949e">CDP</text>
+
+  <!-- ===== Engine ===== -->
+  <rect x="40" y="276" width="1100" height="248" rx="10" fill="#10161f" stroke="#3b434d"/>
+  <text x="62" y="304" font-family="ui-monospace,Consolas,monospace" font-size="13" letter-spacing="2" fill="#3fb950">RUST ENGINE · 九模块</text>
+
+  <!-- row 1 -->
+  <g font-family="'Segoe UI','Microsoft YaHei',sans-serif">
+    <rect x="72" y="326" width="170" height="60" rx="8" fill="#161b22" stroke="#d29922"/>
+    <text x="157" y="352" text-anchor="middle" font-size="15" font-weight="600" fill="#e3b341">session</text>
+    <text x="157" y="372" text-anchor="middle" font-size="11" fill="#8b949e">会话持久化 · 原子写</text>
+
+    <rect x="282" y="326" width="170" height="60" rx="8" fill="#161b22" stroke="#58a6ff"/>
+    <text x="367" y="352" text-anchor="middle" font-size="15" font-weight="600" fill="#79c0ff">agent</text>
+    <text x="367" y="372" text-anchor="middle" font-size="11" fill="#8b949e">主循环 · 提示词注入</text>
+
+    <rect x="492" y="326" width="170" height="60" rx="8" fill="#161b22" stroke="#3fb950"/>
+    <text x="577" y="352" text-anchor="middle" font-size="15" font-weight="600" fill="#7ee2b8">net</text>
+    <text x="577" y="372" text-anchor="middle" font-size="11" fill="#8b949e">SSE 拦截 · 读回</text>
+
+    <rect x="702" y="326" width="170" height="60" rx="8" fill="#161b22" stroke="#bc8cff"/>
+    <text x="787" y="352" text-anchor="middle" font-size="15" font-weight="600" fill="#d2a8ff">tools</text>
+    <text x="787" y="372" text-anchor="middle" font-size="11" fill="#8b949e">工具注册表 · 分级</text>
+
+    <rect x="912" y="326" width="170" height="60" rx="8" fill="#161b22" stroke="#f85149"/>
+    <text x="997" y="352" text-anchor="middle" font-size="15" font-weight="600" fill="#ff7b72">approval</text>
+    <text x="997" y="372" text-anchor="middle" font-size="11" fill="#8b949e">fail-closed 审批门</text>
+
+    <!-- row 2 -->
+    <rect x="912" y="430" width="170" height="60" rx="8" fill="#161b22" stroke="#d29922"/>
+    <text x="997" y="456" text-anchor="middle" font-size="15" font-weight="600" fill="#e3b341">exec</text>
+    <text x="997" y="476" text-anchor="middle" font-size="11" fill="#8b949e">powershell · calc · now · 插件</text>
+  </g>
+
+  <!-- audit cylinder -->
+  <g>
+    <path d="M72 452 a55 12 0 0 1 110 0 v52 a55 12 0 0 1 -110 0 z" fill="#161b22" stroke="#f85149"/>
+    <ellipse cx="127" cy="452" rx="55" ry="12" fill="#1c2128" stroke="#f85149"/>
+    <text x="127" y="494" text-anchor="middle" font-family="ui-monospace,Consolas,monospace" font-size="13" fill="#ff7b72">audit.log</text>
+  </g>
+
+  <!-- internal arrows -->
+  <g stroke="#8b949e" stroke-width="1.6" fill="none">
+    <path d="M242 356 H278" marker-end="url(#arr)"/>
+    <path d="M452 356 H488" marker-end="url(#arr)"/>
+    <path d="M662 356 H698" marker-end="url(#arr)"/>
+    <path d="M872 356 H908" marker-end="url(#arr)"/>
+    <path d="M997 386 V426" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- exec -> agent feedback -->
+  <g stroke="#79c0ff" stroke-width="1.6" fill="none">
+    <path d="M912 460 H420 Q400 460 400 440 V392" marker-end="url(#arrBlue)"/>
+  </g>
+  <text x="640" y="452" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="12" fill="#79c0ff">结果回传 · 进入下一轮</text>
+
+  <!-- exec -> audit dashed -->
+  <g stroke="#f85149" stroke-width="1.4" stroke-dasharray="5 4" fill="none">
+    <path d="M940 490 V545 H200 Q182 545 182 528 V508" marker-end="url(#arrRed)"/>
+  </g>
+  <text x="560" y="538" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="12" fill="#ff7b72">命令哈希 · 风险分级 · 审批来源（人工 / 自动）</text>
+
+  <!-- net -> tools tag -->
+  <text x="680" y="322" text-anchor="middle" font-family="'Segoe UI','Microsoft YaHei',sans-serif" font-size="11.5" fill="#8b949e">工具标记</text>
+
+  <!-- footer note -->
+  <text x="62" y="556" font-family="ui-monospace,Consolas,monospace" font-size="11.5" fill="#6e7681">PRINCIPLE: DEFAULT-DENY · NO BYPASS · EVERYTHING AUDITED</text>
+</svg>

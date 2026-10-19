@@ -1,0 +1,49 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    name: Windows · Rust + Frontend
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: app
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: app/package-lock.json
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache cargo
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: app/src-tauri
+
+      - name: Install frontend deps
+        run: npm ci
+
+      - name: Frontend tests
+        run: npm test
+
+      - name: Frontend build
+        run: npm run build
+
+      # Tauri 的 build script 需要前端 dist；上面的 build 已生成。
+      - name: Rust tests
+        working-directory: app/src-tauri
+        run: cargo test --locked
+
+      - name: Rust warnings gate
+        working-directory: app/src-tauri
+        run: cargo check --tests --locked

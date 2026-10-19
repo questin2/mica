@@ -1,0 +1,80 @@
+[package]
+name = "mica-app"
+version = "0.1.1"
+description = "EAgent 桌面客户端（阶段2 骨架）"
+authors = ["EAgent"]
+edition = "2024"
+
+[lib]
+# The `_lib` suffix may seem redundant but it is necessary
+# to make the lib name unique and wouldn't conflict with the bin name.
+# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
+name = "mica_app_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2", features = [] }
+
+[features]
+# 默认以「窗口子系统」构建（双击启动无控制台窗口）。
+# 排障需要实时 stdout 时打开：cargo build --features console
+console = []
+
+[dependencies]
+tauri = { version = "2", features = ["unstable"] }
+tauri-plugin-opener = "2"
+# 单实例：双开时聚焦已有窗口，避免双写日志/数据库（发布清单 R12）
+tauri-plugin-single-instance = "2"
+# 自动更新：updater（minisign 校验）+ process（安装后重启）
+tauri-plugin-updater = "2"
+tauri-plugin-process = "2"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+webview2-com = "=0.39.1"
+windows = { version = "=0.62.2", features = [
+    "Win32_Foundation",
+    "Win32_System_JobObjects",
+    "Win32_System_Threading",
+] }
+encoding_rs = "0.8"
+base64 = "0.22"
+
+# ---------- MCP 桥接（策划案 2.0 · P1.1）----------
+# 【B-cargo】本次提交**只加依赖、零代码改动**（见 docs/15-mcp-bridge-design.md §8）。
+# tokio：版本写 "1" 而非 "1.53"，让 cargo 复用 Cargo.lock 里已锁的 1.53.3（tauri 2.12.4 已带入），
+#        避免不必要的升级。特性刻意最小集：
+#        - rt：Builder::new_current_thread()
+#        - process：子进程 stdio 传输
+#        - time：tokio::time::timeout（双层超时的内层）
+#        - io-util：AsyncRead/AsyncWrite 扩展（process 隐含，显式写出是意图表达）
+#        不开 macros（桥接线程手写 Builder，不用 #[tokio::main]）、
+#        不开 net（child-process transport 不碰网络）、不开 rt-multi-thread（current_thread 足够）。
+#        注意 feature 是并集：tauri 已开的特性仍然有效，这里只是补我们的最小集。
+tokio = { version = "1", default-features = false, features = ["rt", "process", "time", "io-util"] }
+# rmcp：default-features = false 必须写，否则可能默认带上 server 侧依赖，体积白涨。
+# 三个特性与阶段 A/A′ 实测一致，不多不少：
+#        - client：MCP 客户端
+#        - transport-child-process：stdio 子进程传输
+#        - which-command：Windows 上解析 npx.cmd 这类 shim（阶段 A′3 实测必需）
+rmcp = { version = "3.5.1", default-features = false, features = ["client", "transport-child-process", "which-command"] }
+
+# ---------- 对话层 / 记忆层（策划案 2.0 · Phase 2/3） ----------
+# reqwest：Ollama（localhost HTTP）与 web_read（http/https）。blocking 与现有回合模型一致。
+# default-tls：Windows 上走 schannel，无需额外 OpenSSL。
+reqwest = { version = "0.13", default-features = false, features = ["blocking", "json", "default-tls"] }
+# rusqlite：多会话/消息/工具/长期记忆/知识库。bundled 免系统 SQLite 依赖。
+rusqlite = { version = "0.32", features = ["bundled"] }
+# 知识库文档导入：docx = zip + xml；pdf = pdf-extract（纯 Rust）。
+zip = { version = "2", default-features = false, features = ["deflate"] }
+quick-xml = "0.37"
+pdf-extract = "0.7"
+tauri-plugin-dialog = "2.8.3"
+
+
+# Read the optimization guideline for more details: https://tauri.app/concept/size/#cargo-configuration
+[profile.release]
+codegen-units = 1
+lto = true
+opt-level = 3
+panic = "abort"
+strip = true

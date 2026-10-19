@@ -1,0 +1,257 @@
+/* ==========================================================================
+   Mica · 设计 Token 唯一信源（策划案 docs/07-ui-design-plan.md §4）
+   本文件是**正式信源**（app/ 产品本体）；spike/embed-webview/src/tokens.css 为参考实现副本。
+   规则：组件样式只允许引用本文件变量，禁止裸色值（策划案 §8.2 第 9 条）。
+   ========================================================================== */
+
+:root {
+  /* ---------- 色彩：暗色（默认；暖调人文 —— 采编自 open-claude-ui CDS 方向，2026-10-16） ---------- */
+  --c-bg-canvas: #100F0E;
+  --c-bg-panel: #161513;
+  --c-bg-surface: #1F1D1A;
+  --c-bg-inset: #0C0B0A;
+  --c-bg-hover: rgba(240, 238, 232, 0.05);
+  --c-bg-active: rgba(240, 238, 232, 0.08);
+  --c-line-weak: rgba(240, 238, 232, 0.07);
+  --c-line: rgba(240, 238, 232, 0.1);
+  /* 控件边框：暗色沿用 --c-line，保证外观与改动前逐字一致 */
+  --c-line-control: var(--c-line);
+  --c-line-strong: rgba(240, 238, 232, 0.18);
+  --c-text-1: #F0EEE8;
+  --c-text-2: #B0ABA1;
+  --c-text-3: #8A857B;
+  --c-text-disabled: #5C5850;
+  --c-brand: #D97757;               /* 陶土橙（CDS Clay） */
+  --c-brand-hover: #E68A69;
+  --c-brand-weak: rgba(217, 119, 87, 0.15);
+  --c-brand-line: rgba(217, 119, 87, 0.38); /* 描边式品牌按钮/激活轮廓 */
+  --c-brand-2: #C15F3C;             /* 深陶土（logo 渐变对色） */
+  --c-brand-3: #7FB089;             /* 鼠尾草绿（次级点缀备用） */
+  --c-ok: #6FBF8F;
+  --c-warn: #E2A33F;
+  --c-danger: #E5544B;
+  --c-info: #D97757;
+  --c-risk-readonly: #8A857B;
+  --c-risk-normal: #D97757;
+  --c-risk-danger: #E5544B;
+  --c-focus: #E9A38C;
+  --c-glass: rgba(240, 238, 232, 0.04);
+  --c-scrim: rgba(8, 7, 6, 0.62);
+  --c-code-bg: #121110;
+  --c-code-key: #E9A38C;
+  --c-code-str: #8FBF9F;
+  --c-code-cmt: #6B665C;
+  --c-code-num: #E2A33F;
+  --c-ok-weak: rgba(111, 191, 143, 0.14);
+  --c-warn-weak: rgba(226, 163, 63, 0.14);
+  --c-danger-weak: rgba(229, 84, 75, 0.14);
+  --c-ambient: rgba(217, 119, 87, 0.05); /* 顶部环境暖光（氛围渐变） */
+
+  /* ---------- 阴影（暗色以描边为主） ---------- */
+  --e-0: none;
+  --e-1: inset 0 1px 0 rgba(240, 238, 232, 0.04);
+  --e-2: 0 4px 16px rgba(0, 0, 0, 0.45);
+  --e-3: 0 12px 32px rgba(0, 0, 0, 0.55);
+  --e-danger: 0 0 0 1px rgba(229, 84, 75, 0.5), 0 6px 24px rgba(229, 84, 75, 0.18);
+
+  /* ---------- 排版（策划案 §4.2） ---------- */
+  --font-ui: "Segoe UI Variable Text", "Segoe UI", system-ui, "Microsoft YaHei UI",
+    "Microsoft YaHei", "Noto Sans SC", sans-serif;
+  --font-mono: "Cascadia Mono", "JetBrains Mono", Consolas, "Courier New", monospace;
+  --t-display: 600 20px/1.3 var(--font-ui);
+  --t-title: 600 18px/1.35 var(--font-ui);
+  --t-subtitle: 500 16px/1.4 var(--font-ui);
+  --t-body: 400 14px/1.65 var(--font-ui);
+  --t-body-strong: 500 14px/1.65 var(--font-ui);
+  --t-small: 400 13px/1.5 var(--font-ui);
+  --t-meta: 400 12px/1.5 var(--font-ui);
+  --t-code: 400 12.5px/1.55 var(--font-mono);
+
+  /* ---------- 空间 / 圆角（策划案 §4.3） ---------- */
+  --s-1: 4px;
+  --s-2: 8px;
+  --s-3: 12px;
+  --s-4: 16px;
+  --s-5: 20px;
+  --s-6: 24px;
+  --s-8: 32px;
+  --s-10: 40px;
+  --s-12: 48px;
+  --r-xs: 4px;
+  --r-sm: 6px;
+  --r-md: 8px;
+  --r-lg: 12px;
+  --r-xl: 16px;
+  --r-pill: 999px;
+
+  /* ---------- 复合布局量（策划案 §3.2 / §5.2） ---------- */
+  --h-statusbar: 48px;
+  --h-panel-header: 44px;
+  --w-rail: 336px;
+  --w-rail-collapsed: 48px;
+  --w-browser: 480px;
+  --w-browser-collapsed: 40px;
+  --w-splitter-hit: 12px;
+  /* 对话区窄栏宽度：消息列表 / 输入框 / 顶栏内容三者共用，避免各自写死导致错位 */
+  --w-chat-narrow: 780px;
+  --w-content-max: 1080px;
+
+  /* ---------- 动效（策划案 §6） ---------- */
+  --d-instant: 90ms;
+  --d-fast: 120ms;
+  --d-base: 160ms;
+  --d-slow: 220ms;
+  --ease-out: cubic-bezier(0.2, 0, 0, 1);
+  --ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+  --glass-blur: 14px;
+
+  /* ---------- 层级 ---------- */
+  --z-sticky: 10;
+  --z-splitter: 20;
+  --z-panel-header: 30;
+  --z-statusbar: 40;
+  --z-dropdown: 50;
+  --z-sheet: 60;
+  --z-modal: 70;
+  --z-toast: 80;
+  --z-tooltip: 90;
+
+  /* ---------- 玻璃强度（0=实色 … 3=强玻璃；正文区永不受影响） ---------- */
+  --glass-tint: 240, 238, 232;
+  --glass-alpha: 0.035;
+}
+
+[data-glass="0"] { --glass-alpha: 0; }
+[data-glass="1"] { --glass-alpha: 0.035; }
+[data-glass="2"] { --glass-alpha: 0.06; }
+[data-glass="3"] { --glass-alpha: 0.09; }
+
+/* ---------- 色彩：浅色（暖纸 —— 与暗色同属暖调体系） ---------- */
+[data-theme="light"] {
+  --c-bg-canvas: #F7F5F1;
+  --c-bg-panel: #FFFFFF;
+  --c-bg-surface: #FFFFFF;
+  --c-bg-inset: #F2EFE9;
+  --c-bg-hover: rgba(60, 52, 42, 0.06);
+  --c-bg-active: rgba(60, 52, 42, 0.10);
+  --c-line-weak: rgba(60, 52, 42, 0.10);
+  --c-line: rgba(60, 52, 42, 0.16);
+  --c-line-strong: rgba(60, 52, 42, 0.28);
+  /* 承载状态的边框（输入框/复选框）：对 --c-bg-inset 实测 3.33:1，满足 WCAG 1.4.11 */
+  --c-line-control: #8A8177;
+  --c-text-1: #1F1B16;
+  --c-text-2: #4A4238;
+  --c-text-3: #6B6257;
+  --c-text-disabled: #A69E93;
+  --c-brand: #C15F3C;
+  --c-brand-hover: #AA4F2F;
+  --c-brand-weak: rgba(193, 95, 60, 0.12);
+  --c-brand-line: rgba(193, 95, 60, 0.42);
+  --c-brand-2: #9C4A2B;
+  --c-brand-3: #4E7D5C;
+  --c-ok: #3D7A54;
+  --c-warn: #96660D;
+  --c-danger: #B23730;
+  --c-info: #C15F3C;
+  --c-risk-readonly: #797269;
+  --c-risk-normal: #C15F3C;
+  --c-risk-danger: #B23730;
+  --c-focus: #C15F3C;
+  --c-glass: rgba(251, 250, 247, 0.75);
+  --c-scrim: rgba(28, 25, 21, 0.38);
+  --c-code-bg: #F4F1EB;
+  --c-code-key: #B0553A;
+  --c-code-str: #3D7A54;
+  --c-code-cmt: #8F897F;
+  --c-code-num: #96660D;
+  --c-ok-weak: rgba(61, 122, 84, 0.1);
+  --c-warn-weak: rgba(150, 102, 13, 0.1);
+  --c-danger-weak: rgba(178, 55, 48, 0.1);
+  --c-ambient: rgba(193, 95, 60, 0.04);
+  --e-1: 0 1px 2px rgba(35, 30, 24, 0.08), 0 1px 3px rgba(35, 30, 24, 0.04);
+  --e-2: 0 4px 12px rgba(35, 30, 24, 0.10), 0 1px 3px rgba(35, 30, 24, 0.06);
+  --e-3: 0 14px 32px rgba(35, 30, 24, 0.16), 0 2px 6px rgba(35, 30, 24, 0.08);
+  --e-danger: 0 0 0 1px rgba(178, 55, 48, 0.5), 0 6px 20px rgba(178, 55, 48, 0.12);
+}
+
+/* ---------- 密度 ---------- */
+[data-density="compact"] {
+  --t-body: 400 13.5px/1.55 var(--font-ui);
+  --s-4: 12px;
+  --s-6: 18px;
+}
+
+/* ---------- 减弱动效：系统偏好 + 应用内开关 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  :root { --d-instant: 1ms; --d-fast: 1ms; --d-base: 1ms; --d-slow: 1ms; }
+}
+[data-motion="reduced"] { --d-instant: 1ms; --d-fast: 1ms; --d-base: 1ms; --d-slow: 1ms; }
+
+/* ────────────────────────────────────────────────────────────────────────
+   动效物理令牌（采编自 open-claude-ui，MIT License, Copyright (c) Caho1）
+   来源: code-examples/ClaudeMotionPresets.ts —— CDS_EASING 常量组
+   ──────────────────────────────────────────────────────────────────────── */
+:root {
+  --ease-overshoot: cubic-bezier(0.34, 1.3, 0.64, 1); /* 气泡/胶囊微弹入场（+8.8% 超调） */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);      /* 阴影/微光/渐变 */
+  --ease-decel: cubic-bezier(0.165, 0.84, 0.44, 1);    /* 抽屉/面板滑入标准减速 */
+  --ease-press: cubic-bezier(0.32, 0.72, 0, 1);        /* 瞬时按压缩放 */
+  --d-press: 150ms;                                    /* 按压反馈时长 */
+}
+
+/* ==========================================================================
+   状态驱动动效系统 —— 令牌层（2026-10-18）
+   概念：凹槽（groove）+ 指示灯（LED）。进度条/计数窗/开关轨道都是凹槽，
+        状态点是嵌在凹座里会发光的 LED；动作有重量（按下位移、松开回弹）。
+   规则：组件样式只引用这些变量，不写裸值。
+   ========================================================================== */
+
+/* 1. 明暗两套新拟物深度：浅色亮阴影在左上、暗阴影偏暖棕；暗色反之 */
+[data-theme="light"] {
+  --sh-hi: rgba(255, 255, 255, 0.9);
+  --sh-lo: rgba(120, 95, 70, 0.28);
+  /* 指示灯晕：浅色下实色 + 淡晕 */
+  --led-glow-strength: 38%;
+  --led-glow-size: 6px;
+}
+[data-theme="dark"] {
+  --sh-hi: rgba(255, 255, 255, 0.04);
+  --sh-lo: rgba(0, 0, 0, 0.55);
+  /* 指示灯晕：暗色下更强，LED 才是主要视觉信号 */
+  --led-glow-strength: 62%;
+  --led-glow-size: 9px;
+}
+
+/* 2. 四档深度（结构共用，明暗靠 --sh-* 区分） */
+:root {
+  --depth-raised: -4px -4px 10px var(--sh-hi), 4px 4px 10px var(--sh-lo);
+  --depth-pressed: inset -3px -3px 8px var(--sh-hi), inset 3px 3px 8px var(--sh-lo);
+  --depth-groove: inset 2px 2px 5px var(--sh-lo), inset -2px -2px 5px var(--sh-hi);
+  --depth-float: 0 10px 28px var(--sh-lo), 0 2px 6px var(--sh-lo);
+
+  /* 3. 指示灯语义色（引用既有语义令牌，明暗自动跟随） */
+  --led-idle: var(--c-text-disabled);
+  --led-run: var(--c-brand);
+  --led-wait: var(--c-warn);
+  --led-ok: var(--c-ok);
+  --led-err: var(--c-danger);
+
+  /* 4. 时长与曲线（--dur-* 引用 --d-*，减弱动效时自动归零） */
+  --dur-micro: var(--d-fast);   /* 微交互 80–160ms */
+  --dur-enter: var(--d-base);   /* 入场 200–300ms */
+  --dur-state: var(--d-slow);   /* 状态过渡 300–400ms */
+  --dur-loop: 1.6s;             /* 循环周期 1.2–2s（循环不归零，靠 play-state 停） */
+  --ease-release: cubic-bezier(0.34, 1.3, 0.64, 1); /* 松开回弹 */
+
+  /* 5. 循环动画的播放闸门：减弱动效时暂停 → LED 常亮，状态仍可辨认 */
+  --motion-play: running;
+}
+@media (prefers-reduced-motion: reduce) {
+  :root { --motion-play: paused; }
+}
+[data-motion="reduced"] { --motion-play: paused; }
+/* 「轻」档：保留微交互与入场，停掉所有循环 */
+[data-motion="light"] { --motion-play: paused; }
+
+/* 窗口不可见 / 失焦 → 暂停全部循环动画（useAppearance 里用 visibilitychange 切换） */
+[data-window="blurred"] { --motion-play: paused; }

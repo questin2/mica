@@ -1,0 +1,48 @@
+{
+  "$comment": [
+    "MCP server 配置（策划案 2.0 · 阶段 C）。",
+    "本文件缺失或 servers 为空 = 功能完全不生效，与不启用 MCP 时行为逐字一致。",
+    "",
+    "安全基线：",
+    "1. 只保留一个文件系统 server（fs），根目录固定为 {{DATA_DIR}}\\workspace；",
+    "2. npm 包全部钉死版本；不再使用 everything / filesystem / git / sqlite；",
+    "3. MCP 子进程只继承 env 白名单（见 app/src-tauri/src/security.rs），不继承整份父进程环境；",
+    "4. 本文件属于安全配置快照：外部改动需在设置页显式重载后生效。",
+    "",
+    "注意：@modelcontextprotocol/server-git 与 server-sqlite 在 npm 上已不存在（404），已移除。",
+    "npm_config_cache 由程序自动注入到缓存目录；需要代理等变量时在本文件 env 里显式配置。"
+  ],
+  "servers": {
+    "fs": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem@1.0.0",
+        "{{DATA_DIR}}\\workspace"
+      ],
+      "callTimeoutSec": 30,
+      "command": "npx",
+      "enabled": true,
+      "env": {},
+      "handshakeTimeoutSec": 60
+    },
+    "memory": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-memory@1.0.0"
+      ],
+      "command": "npx",
+      "cwd": "{{DATA_DIR}}\\workspace",
+      "enabled": true,
+      "env": {}
+    },
+    "sequential-thinking": {
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-sequential-thinking@1.0.0"
+      ],
+      "command": "npx",
+      "enabled": true,
+      "env": {}
+    }
+  }
+}

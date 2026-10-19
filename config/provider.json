@@ -1,0 +1,23 @@
+{
+  "$comment": [
+    "对话通道配置（策划案 2.0 · Phase 2）。属于安全配置快照：设置页切换通道会自动刷新；直接改文件需在设置页「重新加载安全配置」确认后生效，未确认时使用安全默认。",
+    "active = deepseek-web：现役网页通道；active = ollama：本地模型。",
+    "maxToolListChars 控制注入提示词的工具清单上限（按通道分别设置）。",
+    "Ollama 默认地址 http://127.0.0.1:11434；模型名必须与 `ollama list` 中的一致。"
+  ],
+  "active": "deepseek-web",
+  "caps": {
+    "deepseek-web": {
+      "maxToolListChars": 12000
+    },
+    "ollama": {
+      "maxToolListChars": 6000
+    }
+  },
+  "ollama": {
+    "baseUrl": "http://127.0.0.1:11434",
+    "connectTimeoutSec": 3,
+    "model": "qwen2.5:0.5b",
+    "requestTimeoutSec": 180
+  }
+}
